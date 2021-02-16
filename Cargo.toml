@@ -1,0 +1,20 @@
+[package]
+name = "flite"
+version = "0.1.0"
+authors = ["EthanYidong <ethanyidong@gmail.com>"]
+edition = "2018"
+links = "flite"
+build = "build.rs"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+thiserror = "1.0"
+const-cstr = "0.3"
+
+[build-dependencies]
+cc = "1.0"
+bindgen = "0.57"
+
+[dev-dependencies]
+hound = "*"
