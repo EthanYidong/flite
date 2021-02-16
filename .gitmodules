@@ -1,0 +1,3 @@
+[submodule "clib/flite"]
+	path = clib/flite
+	url = https://github.com/festvox/flite
