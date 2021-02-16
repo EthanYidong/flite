@@ -27,9 +27,16 @@ fn main() {
 
     let base_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let flite_dir = base_dir.join("clib/flite");
+    let flite_copy_dir = out_dir.join("flite");
+
+    let opts = &fs_extra::dir::CopyOptions {
+        overwrite: true,
+        ..Default::default()
+    };
+    fs_extra::dir::copy(&flite_dir, &out_dir, &opts).unwrap();
     
     // Run configure, make, and make install
-    env::set_current_dir(&flite_dir).unwrap();
+    env::set_current_dir(&flite_copy_dir).unwrap();
     run(Command::new("./configure")
         .arg("--disable-shared")
         .args(&["--prefix", &out_dir.as_os_str().to_str().unwrap()]));
