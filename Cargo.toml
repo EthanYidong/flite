@@ -1,8 +1,11 @@
 [package]
 name = "flite"
+description = "Thin rust wrapper for the Flite TTS library"
 version = "0.1.0"
 authors = ["EthanYidong <ethanyidong@gmail.com>"]
 edition = "2018"
+license = "MIT"
+repository = "https://github.com/EthanYidong/flite"
 links = "flite"
 build = "build.rs"
 
