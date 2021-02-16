@@ -42,6 +42,7 @@ fn main() {
     // Some nessesary headers aren't automatically added by make
     let extra_headers = [
         flite_dir.join("lang/cmulex/cmu_lex.h"),
+        flite_dir.join("lang/cmu_us_kal/cmu_us_kal.c"),
         flite_dir.join("lang/usenglish/usenglish.h"),
     ];
 
