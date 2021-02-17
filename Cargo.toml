@@ -9,8 +9,6 @@ repository = "https://github.com/EthanYidong/flite"
 links = "flite"
 build = "build.rs"
 
-exclude = ["clib/flite/tools/**", "clib/flite/testsuite/**", "clib/flite/doc/**", "clib/flite/sapi/**"]
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

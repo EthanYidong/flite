@@ -38,7 +38,8 @@ fn main() {
     // Run configure, make, and make install
     env::set_current_dir(&flite_copy_dir).unwrap();
     run(Command::new("./configure")
-        .arg("--disable-shared"));
+        .arg("--disable-shared")
+        .arg("--with-audio=none"));
     run(Command::new("make")
         .args(&["-C", "src"]));
     run(Command::new("make")
