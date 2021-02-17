@@ -45,7 +45,7 @@ fn main() {
         .args(&["-C", "lang"]));
 
     // Generate bindings
-    let mut bindings = bindgen::Builder::default();
+    /*let mut bindings = bindgen::Builder::default();
 
     // Some nessesary headers aren't automatically added by make
     let extra_headers = [
@@ -73,7 +73,7 @@ fn main() {
         .expect("Unable to generate bindings")
         .write_to_file(out_dir.join("bindings.rs"))
         .expect("Couldn't write bindings!");
-        
+    */
     let lib_dir = read_dir(flite_copy_dir.join("build")).unwrap().next().unwrap().unwrap().path().join("lib");
     println!("cargo:rustc-link-search={}", lib_dir.as_os_str().to_str().unwrap());
 
