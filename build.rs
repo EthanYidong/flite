@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use std::fs::read_dir;
 use std::process::Command;
 use std::fmt::Display;
+use std::ffi::OsString;
 
 #[allow(dead_code)]
 fn err_to_panic<T, E: Display>(result: Result<T, E>) -> T {
@@ -22,12 +23,11 @@ fn run(command: &mut Command) {
 
 fn main() {
     let out_dir = PathBuf::from(env::var("OUT_DIR").unwrap());
-    let lib_dir = out_dir.join("lib");
-    let include_dir = out_dir.join("include/flite");
 
     let base_dir = PathBuf::from(env::var("CARGO_MANIFEST_DIR").unwrap());
     let flite_dir = base_dir.join("clib/flite");
     let flite_copy_dir = out_dir.join("flite");
+    let include_dir = flite_copy_dir.join("include");
 
     let opts = &fs_extra::dir::CopyOptions {
         overwrite: true,
@@ -38,10 +38,11 @@ fn main() {
     // Run configure, make, and make install
     env::set_current_dir(&flite_copy_dir).unwrap();
     run(Command::new("./configure")
-        .arg("--disable-shared")
-        .args(&["--prefix", &out_dir.as_os_str().to_str().unwrap()]));
-    run(&mut Command::new("make"));
-    run(Command::new("make").arg("install"));
+        .arg("--disable-shared"));
+    run(Command::new("make")
+        .args(&["-C", "src"]));
+    run(Command::new("make")
+        .args(&["-C", "lang"]));
 
     // Generate bindings
     let mut bindings = bindgen::Builder::default();
@@ -59,7 +60,11 @@ fn main() {
 
     // Add all headers to bindings to be safe
     for entry in read_dir(&include_dir).unwrap() {
-        bindings = bindings.header(entry.unwrap().path().into_os_string().into_string().unwrap());
+        let entry = entry.unwrap().path();
+        let extension = entry.extension();
+        if extension == Some(&OsString::from("c")) || extension == Some(&OsString::from("h")) {
+            bindings = bindings.header(entry.into_os_string().into_string().unwrap());
+        }
     }
 
     bindings
@@ -69,6 +74,7 @@ fn main() {
         .write_to_file(out_dir.join("bindings.rs"))
         .expect("Couldn't write bindings!");
         
+    let lib_dir = read_dir(flite_copy_dir.join("build")).unwrap().next().unwrap().unwrap().path().join("lib");
     println!("cargo:rustc-link-search={}", lib_dir.as_os_str().to_str().unwrap());
 
     // Flite genertes multiple static libs, link to all of them
