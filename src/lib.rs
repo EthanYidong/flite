@@ -111,7 +111,7 @@ pub struct Wave {
 drop_impl!(Wave);
 
 impl Wave {
-    pub fn speak(text: impl Into<Vec<u8>>, voice: Voice) -> FliteResult<Wave> {
+    pub fn speak(text: impl Into<Vec<u8>>, voice: &Voice) -> FliteResult<Wave> {
         flite_init();
 
         let text_cstring = CString::new(text)?;
